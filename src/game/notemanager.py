@@ -2,6 +2,7 @@ import pyray as rl
 import math
 import globals
 # from syncmanager import SyncManager
+from map.format.sspm import Note
 
 class NoteManager:
     def __init__(self):
@@ -20,12 +21,12 @@ class NoteManager:
         self.hit_window: float = 1.75 / 30
 
         self.next_note: int = 0
-        self.visible_notes: list = []
+        self.visible_notes: list[Note] = []
 
     def update_notes(self, syncmanager):
         map_time = syncmanager.get_sync_time()
 
-        # Spawn Note Logic
+        # Note Visibility Logic
         while self.next_note < len(globals.sspm_map.note_list):
             note = globals.sspm_map.note_list[self.next_note]
 
@@ -36,13 +37,16 @@ class NoteManager:
             self.visible_notes.append(note)
             self.next_note += 1
 
+        # Miss Note Logic
         while len(self.visible_notes) > 0:
             note = self.visible_notes[0]
             if map_time < note.time + self.hit_window:
                 break
-                
+            
+            
             self.visible_notes.pop(0)
 
+        # Note Rendering Logic
         for note in self.visible_notes:
             time_difference = note.time - map_time
 

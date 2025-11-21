@@ -16,7 +16,6 @@ class Note:
     x: float = 0.0
     y: float = 0.0
     time: float = 0.0 # in seconds
-    hit: bool = False
 
 @dataclass
 class SSPM:
@@ -39,14 +38,14 @@ class SSPM:
     song_name: str = ""
     mappers: list = field(default_factory=list)
 
-    custom_data: list = field(default_factory=list)
+    custom_data: dict = field(default_factory=dict)
 
-    audio_data: bytes = None
-    cover_data: bytes = None
+    audio_data: bytes | None = None
+    cover_data: bytes | None = None
 
-    marker_definitions: list = field(default_factory=list)
+    marker_definitions: dict = field(default_factory=dict)
 
-    markers: list = field(default_factory=list)
+    markers: dict = field(default_factory=dict)
     note_list: list[Note] = field(default_factory=list)
 
 class SSPMParser:
@@ -81,14 +80,14 @@ class SSPMParser:
         self.song_name: str = ""
         self.mappers: list = []
 
-        self.custom_data: list = []
+        self.custom_data: dict = {}
 
         self.audio_data = None
         self.cover_data = None
 
-        self.marker_definitions: list = []
+        self.marker_definitions: dict = {}
 
-        self.markers: list = []
+        self.markers: dict = {}
         self.note_list: list[Note] = [] # for actual in-game parsing
 
     def data_types(self, file: BinaryIO, data_type: int):
@@ -151,20 +150,22 @@ class SSPMParser:
                 raise ValueError(f"Invalid Header: {self.header}")
 
             self.version = binary_reader.read_uint16()
+
+            sspm_file: SSPM | None = None
             if self.version == 2:
-                self.SSPMv2(file)
+                sspm_file = self.SSPMv2(file)
             else:
                 raise ValueError(f"Unsupported Version! This SSPM file is v{self.version}")
         # except:
         #     raise ValueError("Invalid file! Make sure it is a proper SSPM file.")
 
-        return self
+        return sspm_file
 
     def SSPMv1(self):
 
         pass
 
-    def SSPMv2(self, file: BinaryIO):
+    def SSPMv2(self, file: BinaryIO) -> SSPM:
         binary_reader = BinaryReader(file)
 
         file.read(4)
@@ -276,8 +277,10 @@ class SSPMParser:
                     "marker_data_type": data_type,
                     "marker_object_data" : []
                 }
+
                 if data_type == 7:
-                    marker_value_x, marker_value_y = self.data_types(file, data_type)
+                    marker_value = self.data_types(file, data_type)
+                    marker_value_x, marker_value_y = marker_value
                     x = marker_value_x - 1
                     y = -marker_value_y + 1
                     marker_data_dict["marker_object_data"].append({"x": x, "y": y})
@@ -286,7 +289,6 @@ class SSPMParser:
                     new_note.x = x
                     new_note.y = y
                     new_note.time = time / 1000
-                    new_note.hit = False
 
                     self.note_list.append(new_note)
                 else:
