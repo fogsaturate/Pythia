@@ -18,7 +18,7 @@ class NoteManager:
         self.approach_distance = 10
         self.approach_time = self.approach_distance / self.approach_rate
 
-        self.hit_window: float = 1.75 / 30
+        self.hit_window: float = 0.055
 
         self.next_note: int = 0
         self.visible_notes: list[Note] = []
