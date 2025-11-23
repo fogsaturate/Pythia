@@ -9,14 +9,14 @@ class PlayerManager:
         self.camera = rl.Camera3D()
 
         self.camera.position = [0.0, 0.0, 7.5]
-        self.camera.target = [0.0, 0.0, 1.0]
+        self.camera.target = [0.0, 0.0, 0.0]
         self.camera.up = [0.0, 1.0, 0.0]
         self.camera.fovy = 70
         self.camera.projection = 0
         self.camera_pivot = self.camera.position
         self.parallax = 1.0
 
-        self.sensitivity = 5 / 500
+        self.sensitivity = math.radians(0.8)
 
         self.spin: bool = True
 
@@ -57,8 +57,8 @@ class PlayerManager:
         pivot = rl.Vector3(0.0, 0.0, 7.0)
 
         self.camera.position = rl.vector3_add(pivot, rl.Vector3(
-            self.clamped_cursor_position.x * (self.parallax / 4) + (look.x / 2),
-            self.clamped_cursor_position.y * (self.parallax / 4) + (look.y / 2),
+            self.clamped_cursor_position.x * (self.parallax / 4),
+            self.clamped_cursor_position.y * (self.parallax / 4),
             0
         ))
 
@@ -79,10 +79,9 @@ class PlayerManager:
                 self.camera.position.x - look.x * self.camera.position.z / look.z,
                 self.camera.position.y - look.y * self.camera.position.z / look.z
             )
-            
     
     def update_lock(self, motion: rl.Vector2):
-        self.camera.target = rl.vector3_zero()
+        self.camera.target = rl.Vector3(self.camera.position.x, self.camera.position.y, 0)
         self.cursor_position = rl.vector2_add(self.cursor_position, motion)
 
     def clamp(self, v, mn, mx):
