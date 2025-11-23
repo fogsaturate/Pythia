@@ -21,7 +21,7 @@ class PlayScene:
         globals.coordinator.syncmgr.start(-2.0)
         globals.coordinator.init_notemgr()
         globals.coordinator.init_playermgr()
-        globals.coordinator.init_scoremgr(globals.sspm_map)
+        globals.coordinator.init_scoremgr()
 
         print(self.coordinator.playermgr)
 
