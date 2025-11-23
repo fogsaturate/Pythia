@@ -8,10 +8,10 @@ def main():
 
     rl.set_config_flags(rl.FLAG_MSAA_4X_HINT)
 
-    rl.init_window(screen_width, screen_height, "pySpace")
+    rl.init_window(screen_width, screen_height, "Pythia")
     rl.init_audio_device()
 
-    rl.set_target_fps(60)
+    # rl.set_target_fps(60)
     rl.disable_cursor()
 
     SceneManager = scenemanager.SceneManager()

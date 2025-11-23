@@ -40,7 +40,7 @@ class InitScene:
         rl.begin_drawing()
         rl.clear_background(rl.BLACK)
 
-        rl.draw_text("PySpace", int(rl.get_screen_height() / 2), int(rl.get_screen_width() / 2), 20, rl.RAYWHITE)
+        rl.draw_text("Pythia", int(rl.get_screen_width() / 2), int(rl.get_screen_height() / 2), 50, rl.RAYWHITE)
 
         rl.end_drawing()
 
