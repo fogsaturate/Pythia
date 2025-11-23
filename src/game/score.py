@@ -2,10 +2,10 @@ import math
 from map.format.sspm import SSPM
 
 class ScoreManager:
-    def __init__(self, sspm_map: SSPM):
+    def __init__(self):
         self.hits: int = 0
         self.misses: int = 0
-        self.total: int = sspm_map.total_note_count
+        self.total: int = 0
 
         self.accuracy: float = 1.0
 
@@ -24,4 +24,7 @@ class ScoreManager:
         self.update_accuracy()
     
     def update_accuracy(self):
-        self.accuracy: float = round(1.0 if self.hits <= 0 else (self.total - self.misses) / self.total, 4)
+        self.total: int = self.hits + self.misses
+        if self.misses == 0:
+            return 1.0
+        self.accuracy: float = round(1.0 if self.hits <= 0 else self.hits / self.total, 4)

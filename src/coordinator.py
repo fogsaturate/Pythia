@@ -22,6 +22,6 @@ class Coordinator:
     def init_syncmgr(self, sspm_map):
         self.syncmgr = SyncManager(sspm_map)
     
-    def init_scoremgr(self, sspm_map):
-        self.scoremgr = ScoreManager(sspm_map)
+    def init_scoremgr(self):
+        self.scoremgr = ScoreManager()
         print(self.scoremgr.total)
