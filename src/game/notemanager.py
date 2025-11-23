@@ -9,7 +9,7 @@ class NoteManager:
         rotate_y: float = math.radians(90)
         # # self.note_model.materials[0].maps[rl.MATERIAL_MAP_DIFFUSE].color = rl.WHITE
 
-        # self.transform = rl.matrix_scale(0.5,0.5,0.5)
+        self.transform = rl.matrix_scale(0.875,0.875,0.875)
         # self.transform = rl.matrix_multiply(self.transform, rl.matrix_rotate_y(rotate_y))
         self.transform = rl.matrix_rotate_y(rotate_y)
 
