@@ -10,8 +10,8 @@ class NoteManager:
         # # self.note_model.materials[0].maps[rl.MATERIAL_MAP_DIFFUSE].color = rl.WHITE
 
         self.transform = rl.matrix_scale(0.875,0.875,0.875)
-        # self.transform = rl.matrix_multiply(self.transform, rl.matrix_rotate_y(rotate_y))
-        self.transform = rl.matrix_rotate_y(rotate_y)
+        self.transform = rl.matrix_multiply(self.transform, rl.matrix_rotate_y(rotate_y))
+        # self.transform = rl.matrix_rotate_y(rotate_y)
 
         self.approach_rate = 20
         self.approach_distance = 10
@@ -38,15 +38,6 @@ class NoteManager:
             self.visible_notes.append(note)
             self.next_note += 1
 
-        # Miss Note Logic
-        # while len(self.visible_notes) > 0:
-        #     note = self.visible_notes[0]
-        #     if map_time < note.time + self.hit_window:
-        #         break
-            
-            
-        #     self.visible_notes.pop(0)
-
         # Note Rendering Logic
         for note in self.visible_notes:
             time_difference = note.time - map_time
@@ -70,8 +61,8 @@ class NoteManager:
                 break
 
             aabb: float = max(
-                abs(note.x - globals.coordinator.playermgr.cursor_position.x),
-                abs(note.y - globals.coordinator.playermgr.cursor_position.y)
+                abs(note.x - globals.coordinator.playermgr.clamped_cursor_position.x),
+                abs(note.y - globals.coordinator.playermgr.clamped_cursor_position.y)
             )
             if aabb <= 1.1375:
                 hits.append(note)
