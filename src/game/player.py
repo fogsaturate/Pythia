@@ -18,7 +18,7 @@ class PlayerManager:
 
         self.sensitivity = 5 / 500
 
-        self.spin: bool = False
+        self.spin: bool = True
 
         self.cursor_texture = rl.load_texture("assets/images/cursorz.png")
         self.cursor_plane = rl.load_model_from_mesh(rl.gen_mesh_plane(0.525,0.525,1,1))
@@ -35,7 +35,7 @@ class PlayerManager:
         mouse_delta = rl.Vector2(rl.get_mouse_delta().x, -rl.get_mouse_delta().y)
         motion = rl.vector2_scale(mouse_delta, self.sensitivity)
 
-        self.camera.target = rl.Vector3(self.spin_rotation.x, self.spin_rotation.y, 0)
+        # self.camera.target = rl.Vector3(self.spin_rotation.x, self.spin_rotation.y, 0)
 
         # Simulation of Godot's Basis.Z
         look = rl.vector3_subtract(self.camera.target, self.camera.position)
@@ -70,13 +70,16 @@ class PlayerManager:
         rl.draw_model(self.cursor_plane, [self.clamped_cursor_position.x, self.clamped_cursor_position.y, 0.0], 1.0, rl.WHITE)
     
     def update_spin(self, motion: rl.Vector2):
-        self.spin_rotation = rl.vector2_add(self.spin_rotation, rl.Vector2(motion.x, motion.y))
+
+        rl.update_camera_pro(self.camera, [0,0,0], [motion.x * 7.5, -motion.y * 7.5, 0.0], 0.0)
+
         look = rl.vector3_subtract(self.camera.target, self.camera.position)
         if look.z != 0:
             self.cursor_position = rl.Vector2(
                 self.camera.position.x - look.x * self.camera.position.z / look.z,
                 self.camera.position.y - look.y * self.camera.position.z / look.z
             )
+            
     
     def update_lock(self, motion: rl.Vector2):
         self.camera.target = rl.vector3_zero()
