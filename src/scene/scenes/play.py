@@ -1,9 +1,9 @@
 import pyray as rl
-from sceneenum import SceneEnum
-from game.notemanager import NoteManager
-from game.syncmanager import SyncManager
-from game.player import PlayerManager
-from coordinator import Coordinator
+from scene.scene_enum import SceneEnum
+from game.note_manager import NoteManager
+from game.sync_manager import SyncManager
+from game.player_manager import PlayerManager
+from game.coordinator import Coordinator
 import globals
 # import pysspm_rhythia as sspm_parser
 import math
@@ -18,7 +18,7 @@ class PlayScene:
         self.coordinator = globals.coordinator
 
         globals.coordinator.init_syncmgr(globals.sspm_map)
-        globals.coordinator.syncmgr.start(-2.0)
+        globals.coordinator.syncmgr.start(-1.0)
         globals.coordinator.init_notemgr()
         globals.coordinator.init_playermgr()
         globals.coordinator.init_scoremgr()

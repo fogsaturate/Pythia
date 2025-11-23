@@ -1,8 +1,8 @@
 from map.format.sspm import SSPM
-from game.notemanager import NoteManager
-from game.player import PlayerManager
-from game.syncmanager import SyncManager
-from game.score import ScoreManager
+from game.note_manager import NoteManager
+from game.player_manager import PlayerManager
+from game.sync_manager import SyncManager
+from game.score_manager import ScoreManager
 
 class Coordinator:
     def __init__(self):

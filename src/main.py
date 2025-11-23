@@ -1,10 +1,11 @@
 import pyray as rl
-import scenemanager
+import scene.scene_manager as scene_manager
+from globals import settings
 
 def main():
 
-    screen_width: int = 1600
-    screen_height: int = 900
+    screen_width = settings.width
+    screen_height = settings.height
 
     rl.set_config_flags(rl.FLAG_MSAA_4X_HINT)
 
@@ -14,12 +15,12 @@ def main():
     # rl.set_target_fps(60)
     rl.disable_cursor()
 
-    SceneManager = scenemanager.SceneManager()
+    SceneManager = scene_manager.SceneManager()
 
     while not rl.window_should_close():
 
 
-        if rl.is_key_pressed(rl.KeyboardKey.KEY_ENTER) and rl.is_key_down(rl.KeyboardKey.KEY_LEFT_ALT):
+        if rl.is_key_pressed(rl.KeyboardKey.KEY_ENTER) and rl.is_key_down(rl.KeyboardKey.KEY_LEFT_ALT) or rl.is_key_down(rl.KeyboardKey.KEY_RIGHT_ALT):
 
             display = rl.get_current_monitor()
 

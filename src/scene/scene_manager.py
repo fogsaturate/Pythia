@@ -1,7 +1,7 @@
 import pyray as rl
-from sceneenum import SceneEnum
-from scene.init import InitScene
-from scene.play import PlayScene
+from scene.scene_enum import SceneEnum
+from scene.scenes.init import InitScene
+from scene.scenes.play import PlayScene
 
 import map.format.sspm as sspm
 from map.format.sspm import SSPM

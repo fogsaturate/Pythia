@@ -1,5 +1,5 @@
 import pyray as rl
-from sceneenum import SceneEnum
+from scene.scene_enum import SceneEnum
 from tkinter import filedialog as fd
 from map.format.sspm import SSPMParser
 import globals
@@ -45,4 +45,6 @@ class InitScene:
         rl.end_drawing()
 
         if self.decoding_finished:
+            if globals.settings.fullscreen:
+                rl.toggle_fullscreen()
             self.scene_manager.switch_scene(SceneEnum.PLAY)

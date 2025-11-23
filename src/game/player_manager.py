@@ -18,7 +18,7 @@ class PlayerManager:
 
         self.sensitivity = math.radians(0.8)
 
-        self.spin: bool = True
+        self.spin: bool = False
 
         self.cursor_texture = rl.load_texture("assets/images/cursorz.png")
         self.cursor_plane = rl.load_model_from_mesh(rl.gen_mesh_plane(0.525,0.525,1,1))
@@ -34,8 +34,6 @@ class PlayerManager:
     def update(self):
         mouse_delta = rl.Vector2(rl.get_mouse_delta().x, -rl.get_mouse_delta().y)
         motion = rl.vector2_scale(mouse_delta, self.sensitivity)
-
-        # self.camera.target = rl.Vector3(self.spin_rotation.x, self.spin_rotation.y, 0)
 
         # Simulation of Godot's Basis.Z
         look = rl.vector3_subtract(self.camera.target, self.camera.position)
