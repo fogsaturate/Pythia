@@ -3,6 +3,8 @@ import math
 from map.format.sspm import Note
 import globals
 
+note_settings = globals.settings.note_settings
+
 class NoteManager:
     def __init__(self):
         self.note_model = rl.load_model("assets/meshes/Square.obj")
@@ -14,8 +16,8 @@ class NoteManager:
         
         self.transform = rl.matrix_rotate_y(rotate_y)
 
-        self.approach_rate = 20
-        self.approach_distance = 10
+        self.approach_rate = note_settings.approach_rate
+        self.approach_distance = note_settings.approach_distance
         self.approach_time = self.approach_distance / self.approach_rate
 
         self.hit_window: float = 0.055
@@ -48,8 +50,13 @@ class NoteManager:
             position = [note.x * 2, note.y * 2, -z_time]
 
             self.note_model.transform = self.transform
-            rl.draw_model(self.note_model, position, 1.0, rl.WHITE)
-        
+
+            # If note is past the border and pushback is off, then skip rendering
+            if time_difference > 0 and not note_settings.note_pushback:
+                rl.draw_model(self.note_model, position, 1.0, rl.WHITE)
+            elif note_settings.note_pushback:
+                rl.draw_model(self.note_model, position, 1.0, rl.WHITE)
+
         # Hit Detection Logic
         hits: list[Note] = []
         for note in self.visible_notes:
