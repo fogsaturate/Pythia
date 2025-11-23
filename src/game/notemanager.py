@@ -1,8 +1,7 @@
 import pyray as rl
 import math
-import globals
-# from syncmanager import SyncManager
 from map.format.sspm import Note
+import globals
 
 class NoteManager:
     def __init__(self):
@@ -22,6 +21,8 @@ class NoteManager:
 
         self.next_note: int = 0
         self.visible_notes: list[Note] = []
+        self.coordinator = globals.coordinator
+
 
     def update_notes(self, syncmanager):
         map_time = syncmanager.get_sync_time()
@@ -38,13 +39,13 @@ class NoteManager:
             self.next_note += 1
 
         # Miss Note Logic
-        while len(self.visible_notes) > 0:
-            note = self.visible_notes[0]
-            if map_time < note.time + self.hit_window:
-                break
+        # while len(self.visible_notes) > 0:
+        #     note = self.visible_notes[0]
+        #     if map_time < note.time + self.hit_window:
+        #         break
             
             
-            self.visible_notes.pop(0)
+        #     self.visible_notes.pop(0)
 
         # Note Rendering Logic
         for note in self.visible_notes:
@@ -56,7 +57,40 @@ class NoteManager:
             z_time = progress * self.approach_distance
             position = [note.x * 2, note.y * 2, -z_time]
 
+            # print(self.cursor_pos)
             # if visible:
             self.note_model.transform = self.transform
             rl.draw_model(self.note_model, position, 1.0, rl.WHITE)
-            
+        
+        # Hit Detection Logic
+        hits: list[Note] = []
+        for note in self.visible_notes:
+            # Skip this note if it hasn't passed the border yet
+            if map_time < note.time:
+                break
+
+            aabb: float = max(
+                abs(note.x - globals.coordinator.playermgr.cursor_position.x),
+                abs(note.y - globals.coordinator.playermgr.cursor_position.y)
+            )
+            if aabb <= 1.1375:
+                hits.append(note)
+                globals.coordinator.scoremgr.add_hit()
+        
+        # Made a new list so it doesn't cycle in itself
+        for note in hits:
+            self.visible_notes.remove(note)
+        
+        # Miss Detection Logic
+        # As long as notes are above zero, continue
+        while len(self.visible_notes) > 0:
+            note = self.visible_notes[0]
+
+            # If the note hasn't passed the border AND the hit window, then skip
+            if map_time < note.time + self.hit_window:
+                break
+
+            globals.coordinator.scoremgr.add_miss()
+            self.visible_notes.pop(0)
+
+
