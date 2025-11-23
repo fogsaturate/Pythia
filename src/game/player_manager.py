@@ -3,6 +3,9 @@
 
 import pyray as rl
 import math
+import globals
+
+player_settings = globals.settings.player_settings
 
 class PlayerManager:
     def __init__(self):
@@ -14,11 +17,11 @@ class PlayerManager:
         self.camera.fovy = 70
         self.camera.projection = 0
         self.camera_pivot = self.camera.position
-        self.parallax = 1.0
 
-        self.sensitivity = math.radians(0.8)
+        self.parallax = player_settings.parallax
+        self.sensitivity = math.radians(player_settings.sensitivity)
 
-        self.spin: bool = False
+        self.spin: bool = player_settings.spin
 
         self.cursor_texture = rl.load_texture("assets/images/cursorz.png")
         self.cursor_plane = rl.load_model_from_mesh(rl.gen_mesh_plane(0.525,0.525,1,1))
