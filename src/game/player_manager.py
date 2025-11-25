@@ -31,14 +31,30 @@ class PlayerManager:
         
         self.cursor_position = rl.Vector2()
         self.clamped_cursor_position = rl.Vector2()
-        self.spin_rotation = rl.Vector2()
+
+        if player_settings.absolute_mode:
+            # Hidden Cursor
+            rl.hide_cursor()
+        else:
+            # Captured Cursor
+            rl.disable_cursor()
 
     # Input Update
     def update(self):
-        mouse_delta = rl.Vector2(rl.get_mouse_delta().x, -rl.get_mouse_delta().y)
-        motion = rl.vector2_scale(mouse_delta, self.sensitivity)
 
         # Input/Cursor Movement Logic
+
+        relative = rl.Vector2(rl.get_mouse_delta().x, rl.get_mouse_delta().y)
+
+        if player_settings.absolute_mode:
+            window_size: rl.Vector2 = rl.Vector2(rl.get_screen_width(), rl.get_screen_height())
+            position: rl.Vector2 = rl.get_mouse_position()
+            center: rl.Vector2 = rl.Vector2(window_size.x / 2, window_size.y / 2)
+            relative = rl.vector2_subtract(position, center)
+            self.camera.target = rl.vector3_zero()
+            self.cursor_position = rl.vector2_zero()
+        
+        motion = rl.vector2_scale(rl.Vector2(relative.x, -relative.y), self.sensitivity)
 
         if self.spin == True:
             self.update_spin(motion)

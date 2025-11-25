@@ -42,6 +42,7 @@ class SettingsManager:
         self.settings.width = json_obj["width"]
         self.settings.height = json_obj["height"]
         self.settings.fullscreen = json_obj["fullscreen"]
+        self.settings.fps = json_obj["fps"]
 
         # Note Settings
         note_obj = json_obj["note_settings"]

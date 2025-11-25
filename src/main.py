@@ -12,9 +12,6 @@ def main():
     rl.init_window(screen_width, screen_height, "Pythia")
     rl.init_audio_device()
 
-    # rl.set_target_fps(60)
-    rl.disable_cursor()
-
     SceneManager = scene_manager.SceneManager()
 
     while not rl.window_should_close():

@@ -24,7 +24,7 @@ class NoteSettings:
 @dataclass
 class PlayerSettings:
     sensitivity: float = 0.8
-    absolute_mode: bool = False # Unused
+    absolute_mode: bool = False
 
     parallax: float = 1.0
 
@@ -68,6 +68,8 @@ class Settings:
 
     fullscreen: bool = False
 
+    fps = 0 # 0 = Uncapped
+
     note_settings: NoteSettings = field(default_factory=NoteSettings)
     player_settings: PlayerSettings = field(default_factory=PlayerSettings)
     audio_settings: AudioSettings = field(default_factory=AudioSettings)
@@ -77,6 +79,7 @@ class Settings:
             "width": self.width,
             "height": self.height,
             "fullscreen": self.fullscreen,
+            "fps": 0,
             "note_settings": self.note_settings.as_dict(),
             "player_settings": self.player_settings.as_dict(),
             "audio_settings": self.audio_settings.as_dict()

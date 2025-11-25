@@ -12,6 +12,10 @@ class InitScene:
         self.scene_manager = scene_manager
     
     def awake(self):
+        fps_setting = globals.settings.fps
+        if fps_setting != 0:
+            rl.set_target_fps(fps_setting)
+
         appdata_roaming = os.getenv("APPDATA")
         self.ssp_folder = os.path.join(appdata_roaming, "SoundSpacePlus")
         self.map_folder = os.path.join(self.ssp_folder, "maps")
