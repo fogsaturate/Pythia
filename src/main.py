@@ -20,7 +20,7 @@ def main():
     while not rl.window_should_close():
 
 
-        if rl.is_key_pressed(rl.KeyboardKey.KEY_ENTER) and rl.is_key_down(rl.KeyboardKey.KEY_LEFT_ALT) or rl.is_key_down(rl.KeyboardKey.KEY_RIGHT_ALT):
+        if rl.is_key_pressed(rl.KeyboardKey.KEY_ENTER) and rl.is_key_down(rl.KeyboardKey.KEY_LEFT_ALT) or rl.is_key_down(rl.KeyboardKey.KEY_RIGHT_ALT) and rl.is_key_pressed(rl.KeyboardKey.KEY_ENTER):
 
             display = rl.get_current_monitor()
 
