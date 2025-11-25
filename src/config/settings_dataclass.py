@@ -4,10 +4,10 @@ from dataclasses import dataclass, field
 class NoteSettings:
     approach_rate: float = 20
     approach_distance: float = 12
-    fade_in: float = 25
+    fade_in: float = 0.25
 
     note_pushback: bool = True
-    color_set: list[str] = field(default_factory=lambda: ["#ffffff"])
+    color_set: list[str] = field(default_factory=lambda: ["#00ffed", "ff8ff9"])
 
     half_ghost: bool = False # Unused
 
@@ -31,6 +31,7 @@ class PlayerSettings:
     spin: bool = False
     cursor_drift: bool = False
     buffer_cursor_fade_distance: float = 5.0 # How long until the cursor is completely opaque
+    speed: float = 1.0
 
     def as_dict(self):
         return {
@@ -39,7 +40,8 @@ class PlayerSettings:
             "parallax": self.parallax,
             "spin": self.spin,
             "cursor_drift": self.cursor_drift,
-            "buffer_cursor_fade_distance": self.buffer_cursor_fade_distance
+            "buffer_cursor_fade_distance": self.buffer_cursor_fade_distance,
+            "speed": 1.0
         }
 
 @dataclass
