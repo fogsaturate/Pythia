@@ -63,6 +63,7 @@ class SettingsManager:
         self.settings.player_settings.spin = player_obj["spin"]
         self.settings.player_settings.cursor_drift = player_obj["cursor_drift"]
         self.settings.player_settings.buffer_cursor_fade_distance = player_obj["buffer_cursor_fade_distance"]
+        self.settings.player_settings.speed = player_obj["speed"]
 
         # Audio Settings
         audio_obj = json_obj["audio_settings"]

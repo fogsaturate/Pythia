@@ -4,6 +4,7 @@ from map.format.sspm import Note
 import globals
 
 note_settings = globals.settings.note_settings
+speed = globals.settings.player_settings.speed
 
 class NoteManager:
     def __init__(self):
@@ -20,7 +21,7 @@ class NoteManager:
         self.approach_distance = note_settings.approach_distance
         self.approach_time = self.approach_distance / self.approach_rate
 
-        self.hit_window: float = 0.055
+        self.hit_window: float = 0.055 * speed
 
         self.next_note: int = 0
         self.visible_notes: list[Note] = []
@@ -65,7 +66,11 @@ class NoteManager:
 
             self.note_model.transform = self.transform
 
-            alpha: float = self.clamp((1 - progress) / (note_settings.fade_in / 100), 0, 1)
+            alpha: float = None
+            if note_settings.fade_in != 0:
+                alpha = self.clamp((1 - progress) / (self.clamp(note_settings.fade_in, 0.0, 1.0)), 0, 1)
+            else:
+                alpha = 1.0
             # I can just use the same color here since the fade function just changes the alpha
             note_color.a = rl.fade(note_color, alpha).a
 

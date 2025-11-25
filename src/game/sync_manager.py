@@ -3,6 +3,7 @@ import pyray as rl
 import globals
 
 audio_settings = globals.settings.audio_settings
+speed = globals.settings.player_settings.speed
 
 class SyncManager:
     def __init__(self, sspm: SSPM):
@@ -20,6 +21,7 @@ class SyncManager:
                 audio_extension = ".mp3"
 
         self.music_stream: rl.Music = rl.load_music_stream_from_memory(audio_extension, audio_data, len(audio_data))
+        rl.set_music_pitch(self.music_stream, speed)
 
         self.start_time = 0.0
         self.time = 0.0 # Will be counted in update()
@@ -40,8 +42,8 @@ class SyncManager:
     def update(self):
         self.time = rl.get_time()
 
-        syncmgr_time = self.get_sync_time()
-        music_time = rl.get_music_time_played(self.music_stream)
+        syncmgr_time = self.get_sync_time() * speed
+        music_time = rl.get_music_time_played(self.music_stream) * speed
 
         threshold = 0.150 # Offsync Threshold in seconds
 
@@ -59,4 +61,4 @@ class SyncManager:
             rl.update_music_stream(self.music_stream)
 
     def get_sync_time(self):
-        return self.time - self.start_time
+        return (self.time - self.start_time) * speed
