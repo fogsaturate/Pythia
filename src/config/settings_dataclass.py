@@ -4,10 +4,10 @@ from dataclasses import dataclass, field
 class NoteSettings:
     approach_rate: float = 20
     approach_distance: float = 12
-    fade_in: float = 25 # Unused
+    fade_in: float = 25
 
-    note_pushback: bool = True # Unused
-    color_set: list[str] = field(default_factory=lambda: ["#ffffff"]) # Unused
+    note_pushback: bool = True
+    color_set: list[str] = field(default_factory=lambda: ["#ffffff"])
 
     half_ghost: bool = False # Unused
 
@@ -29,7 +29,7 @@ class PlayerSettings:
     parallax: float = 1.0
 
     spin: bool = False
-    cursor_drift: bool = False # Unused
+    cursor_drift: bool = False
     buffer_cursor_fade_distance: float = 5.0 # How long until the cursor is completely opaque
 
     def as_dict(self):
@@ -47,8 +47,8 @@ class AudioSettings:
     song_volume: float = 1.0 # 0.0 - 1.0 normalized
     hit_volume: float = 1.0 # hit sounds, [unused]
 
-    warm_up_time: float = 0.0 # in seconds, how long until song plays [unused]
-    start_from_time: float = -1.0 # currently used as warm up time
+    warm_up_time: float = 1.0 # seconds before the song starts
+    start_from_time: float = 0.0 # currently used as warm up time
 
     def as_dict(self):
         return {
