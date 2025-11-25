@@ -290,7 +290,6 @@ class SSPMParser:
                     new_note.x = x
                     new_note.y = y
                     new_note.time = time / 1000
-                    new_note.index = i
 
                     self.note_list.append(new_note)
                 else:
@@ -302,6 +301,13 @@ class SSPMParser:
         self.markers = marker_dict
 
         sorted_note_list = sorted(self.note_list, key=lambda Note: Note.time)
+
+        # Indexes will also be out of order, so we need to fix that!
+        for i in range(len(sorted_note_list)):
+            note = sorted_note_list[i]
+
+            note.index = i
+
         self.note_list = sorted_note_list
 
         return SSPM(
