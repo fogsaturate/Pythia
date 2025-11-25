@@ -11,6 +11,9 @@ class ScoreManager:
 
         self.combo: int = 0
         self.max_combo: int = 0
+
+        self.health: int = 40
+        self.failed = False
     
     def add_hit(self):
         self.hits += 1
@@ -18,10 +21,17 @@ class ScoreManager:
         self.max_combo = max(self.combo, self.max_combo)
         self.update_accuracy()
 
+        if self.health < 40 and not self.failed:
+            self.health = min(self.health + 5, 40)
+
     def add_miss(self):
         self.misses += 1
         self.combo = 0
         self.update_accuracy()
+
+        if not self.failed:
+            self.health = max(self.health - 8, 0)
+            if self.health == 0: self.failed = True
     
     def update_accuracy(self):
         self.total: int = self.hits + self.misses
