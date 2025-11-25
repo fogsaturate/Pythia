@@ -15,6 +15,9 @@ class SyncManager:
                 audio_extension = ".ogg"
             case "mp3":
                 audio_extension = ".mp3"
+            case _:
+                print(f"Unknown Extension!: {audio_extension}")
+                audio_extension = ".mp3"
 
         self.music_stream: rl.Music = rl.load_music_stream_from_memory(audio_extension, audio_data, len(audio_data))
 
