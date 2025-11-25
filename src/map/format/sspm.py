@@ -305,7 +305,6 @@ class SSPMParser:
         # Indexes will also be out of order, so we need to fix that!
         for i in range(len(sorted_note_list)):
             note = sorted_note_list[i]
-
             note.index = i
 
         self.note_list = sorted_note_list
