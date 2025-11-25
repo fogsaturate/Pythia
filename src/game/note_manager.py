@@ -45,6 +45,9 @@ class NoteManager:
 
         # Note Rendering Logic
         for note in self.visible_notes:
+            
+            note_color: rl.Color = self.colors[note.index % len(self.colors)]
+
             time_difference = note.time - map_time
             progress = time_difference / self.approach_time
 
@@ -53,11 +56,15 @@ class NoteManager:
 
             self.note_model.transform = self.transform
 
+            alpha: float = self.clamp((1 - progress) / (note_settings.fade_in / 100), 0, 1)
+            # I can just use the same color here since the fade function just changes the alpha
+            note_color.a = rl.fade(note_color, alpha).a
+
             # If note is past the border and pushback is off, then skip rendering
             if time_difference > 0 and not note_settings.note_pushback:
-                rl.draw_model(self.note_model, position, 1.0, self.colors[note.index % len(self.colors)])
+                rl.draw_model(self.note_model, position, 1.0, note_color)
             elif note_settings.note_pushback:
-                rl.draw_model(self.note_model, position, 1.0, self.colors[note.index % len(self.colors)])
+                rl.draw_model(self.note_model, position, 1.0, note_color)
 
         # Hit Detection Logic
         hits: list[Note] = []
@@ -91,6 +98,8 @@ class NoteManager:
             globals.coordinator.scoremgr.add_miss()
             self.visible_notes.pop(0)
 
+    # Conversion Library
+
     def str_to_color(self, hex: str) -> rl.Color:
         hex_str: str = None
 
@@ -112,6 +121,12 @@ class NoteManager:
             color_list.append(self.str_to_color(color))
 
         return color_list
+
+    def clamp(self, v, mn, mx):
+        return max(min(v, mx), mn)
     
+    def range_normalized(self, x, mn, mx):
+        x = self.clamp(x, mn, mx)
+        return int((x - mn) / (mx - mn) * 255)
 
 
