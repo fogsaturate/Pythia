@@ -23,7 +23,7 @@ class PlayerManager:
 
         self.spin: bool = player_settings.spin
 
-        self.cursor_texture = rl.load_texture("assets/images/cursorz.png")
+        self.cursor_texture = rl.load_texture("assets/images/cursor.png")
         self.cursor_plane = rl.load_model_from_mesh(rl.gen_mesh_plane(0.525,0.525,1,1))
         self.cursor_plane.materials[0].maps[rl.MATERIAL_MAP_DIFFUSE].texture = self.cursor_texture
         self.transform = rl.matrix_rotate_x(math.radians(90))
