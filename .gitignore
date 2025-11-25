@@ -1,2 +1,4 @@
 **.cpython-313.pyc
 settings.json
+dist/
+build/

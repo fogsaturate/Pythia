@@ -1,5 +1,12 @@
+altgraph==0.17.5
 cffi==2.0.0
 fleep==1.0.1
 numpy==2.3.5
+packaging==25.0
+pefile==2024.8.26
 pycparser==2.23
+pyinstaller==6.17.0
+pyinstaller-hooks-contrib==2025.10
+pywin32-ctypes==0.2.3
 raylib==5.5.0.3
+setuptools==80.9.0
