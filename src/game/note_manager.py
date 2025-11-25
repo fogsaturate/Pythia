@@ -24,19 +24,28 @@ class NoteManager:
 
         self.next_note: int = 0
         self.visible_notes: list[Note] = []
+
+        self.start_from_time: float = globals.settings.audio_settings.start_from_time
         self.coordinator = globals.coordinator
 
         self.colors = self.load_colors(note_settings.color_set)
 
+        # Start From Logic
+        i = 0
+        while i < len(globals.sspm_map.note_list):
+            if globals.sspm_map.note_list[i].time < self.start_from_time:
+                globals.sspm_map.note_list.pop(i)
+            else:
+                i+= 1
 
-    def update_notes(self, syncmanager):
-        map_time = syncmanager.get_sync_time()
+    def update_notes(self):
+        map_time = globals.coordinator.syncmgr.get_sync_time()
 
         # Note Visibility Logic
         while self.next_note < len(globals.sspm_map.note_list):
             note = globals.sspm_map.note_list[self.next_note]
 
-            # If the note is ahead of the map time by how much approach time
+            # If the note is ahead of the map time by how much approach time, then skip
             if note.time > map_time + self.approach_time:
                 break
 

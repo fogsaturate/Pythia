@@ -18,7 +18,7 @@ class PlayScene:
         self.coordinator = globals.coordinator
 
         globals.coordinator.init_syncmgr(globals.sspm_map)
-        globals.coordinator.syncmgr.start(-1.0)
+        globals.coordinator.syncmgr.start()
         globals.coordinator.init_notemgr()
         globals.coordinator.init_playermgr()
         globals.coordinator.init_scoremgr()
@@ -50,7 +50,7 @@ class PlayScene:
 
         rl.begin_mode_3d(self.coordinator.playermgr.camera)
 
-        self.coordinator.notemgr.update_notes(self.coordinator.syncmgr)
+        self.coordinator.notemgr.update_notes()
         self.coordinator.playermgr.draw()
         rl.draw_model(self.border_plane, [0.0,0.0,0.0], 1.0, rl.WHITE)
 
