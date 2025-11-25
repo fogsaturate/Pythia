@@ -24,4 +24,3 @@ class Coordinator:
     
     def init_scoremgr(self):
         self.scoremgr = ScoreManager()
-        print(self.scoremgr.total)

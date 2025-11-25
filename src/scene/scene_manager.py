@@ -1,10 +1,6 @@
-import pyray as rl
 from scene.scene_enum import SceneEnum
 from scene.scenes.init import InitScene
 from scene.scenes.play import PlayScene
-
-import map.format.sspm as sspm
-from map.format.sspm import SSPM
 
 # This will also be used as my global variables container
 
