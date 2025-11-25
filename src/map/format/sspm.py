@@ -16,6 +16,7 @@ class Note:
     x: float = 0.0
     y: float = 0.0
     time: float = 0.0 # in seconds
+    index: int = 0
 
 @dataclass
 class SSPM:
@@ -289,6 +290,7 @@ class SSPMParser:
                     new_note.x = x
                     new_note.y = y
                     new_note.time = time / 1000
+                    new_note.index = i
 
                     self.note_list.append(new_note)
                 else:

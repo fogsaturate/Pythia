@@ -26,6 +26,8 @@ class NoteManager:
         self.visible_notes: list[Note] = []
         self.coordinator = globals.coordinator
 
+        self.colors = self.load_colors(note_settings.color_set)
+
 
     def update_notes(self, syncmanager):
         map_time = syncmanager.get_sync_time()
@@ -53,9 +55,9 @@ class NoteManager:
 
             # If note is past the border and pushback is off, then skip rendering
             if time_difference > 0 and not note_settings.note_pushback:
-                rl.draw_model(self.note_model, position, 1.0, rl.WHITE)
+                rl.draw_model(self.note_model, position, 1.0, self.colors[note.index % len(self.colors)])
             elif note_settings.note_pushback:
-                rl.draw_model(self.note_model, position, 1.0, rl.WHITE)
+                rl.draw_model(self.note_model, position, 1.0, self.colors[note.index % len(self.colors)])
 
         # Hit Detection Logic
         hits: list[Note] = []
@@ -88,5 +90,28 @@ class NoteManager:
 
             globals.coordinator.scoremgr.add_miss()
             self.visible_notes.pop(0)
+
+    def str_to_color(self, hex: str) -> rl.Color:
+        hex_str: str = None
+
+        if "#" in hex:
+            hex_str = hex.replace("#", "") # Get rid of the optional # character
+        else:
+            hex_str = hex
+
+        r: int = int(hex_str[0:2], 16)
+        g: int = int(hex_str[2:4], 16)
+        b: int = int(hex_str[4:6], 16)
+
+        return rl.Color(r,g,b,255)
+
+    def load_colors(self, string_list: list[str]) -> list[rl.Color]:
+        color_list: list[rl.Color] = []
+        
+        for color in string_list:
+            color_list.append(self.str_to_color(color))
+
+        return color_list
+    
 
 
