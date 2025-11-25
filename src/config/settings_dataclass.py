@@ -30,6 +30,7 @@ class PlayerSettings:
 
     spin: bool = False
     cursor_drift: bool = False # Unused
+    buffer_cursor_fade_distance: float = 5.0 # How long until the cursor is completely opaque
 
     def as_dict(self):
         return {
@@ -37,7 +38,8 @@ class PlayerSettings:
             "absolute_mode": self.absolute_mode,
             "parallax": self.parallax,
             "spin": self.spin,
-            "cursor_drift": self.cursor_drift
+            "cursor_drift": self.cursor_drift,
+            "buffer_cursor_fade_distance": self.buffer_cursor_fade_distance
         }
 
 @dataclass

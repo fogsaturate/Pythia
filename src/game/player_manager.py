@@ -69,6 +69,10 @@ class PlayerManager:
     # Draw Update (for cursor textures n such)
     def draw(self):
         rl.draw_model(self.cursor_plane, [self.clamped_cursor_position.x, self.clamped_cursor_position.y, 0.0], 1.0, rl.WHITE)
+
+        print(player_settings.cursor_drift)
+        if not player_settings.cursor_drift and self.max_abs(self.cursor_position.x, self.cursor_position.y) > 2.7375:
+            rl.draw_model(self.cursor_plane, [self.cursor_position.x, self.cursor_position.y, 0.0], 1.0, rl.RED)
     
     def update_spin(self, motion: rl.Vector2):
 
@@ -87,3 +91,6 @@ class PlayerManager:
 
     def clamp(self, v, mn, mx):
         return max(min(v, mx), mn)
+    
+    def max_abs(self, v1, v2):
+        return max(abs(v1), abs(v2))
