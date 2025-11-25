@@ -38,9 +38,6 @@ class PlayerManager:
         mouse_delta = rl.Vector2(rl.get_mouse_delta().x, -rl.get_mouse_delta().y)
         motion = rl.vector2_scale(mouse_delta, self.sensitivity)
 
-        # Simulation of Godot's Basis.Z
-        look = rl.vector3_subtract(self.camera.target, self.camera.position)
-
         # Input/Cursor Movement Logic
 
         if self.spin == True:
@@ -57,9 +54,12 @@ class PlayerManager:
 
         pivot = rl.Vector3(0.0, 0.0, 7.0)
 
+        # Simulation of Godot's Basis.Z
+        look = rl.vector3_subtract(self.camera.target, self.camera.position)
+
         self.camera.position = rl.vector3_add(pivot, rl.Vector3(
-            self.clamped_cursor_position.x * (self.parallax / 4),
-            self.clamped_cursor_position.y * (self.parallax / 4),
+            self.clamped_cursor_position.x * (self.parallax / 4) + (look.x / 2.0),
+            self.clamped_cursor_position.y * (self.parallax / 4) + (look.y / 2.0),
             0
         ))
 
