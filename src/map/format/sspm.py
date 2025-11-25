@@ -2,6 +2,8 @@ from typing import BinaryIO
 from map.binary_reader import BinaryReader
 from enum import Enum
 from dataclasses import dataclass, field
+import fleep
+import io
 
 class Difficulty(Enum):
     NA = 0
@@ -48,6 +50,13 @@ class SSPM:
 
     markers: dict = field(default_factory=dict)
     note_list: list[Note] = field(default_factory=list)
+
+    # Will return the extension. ex, .mp3, or .ogg, .wav, etc
+    def CheckAudioFormat(self, audio_bytes: bytes) -> str:
+        with io.BytesIO(audio_bytes) as file_bytes:
+            magic_number = fleep.get(file_bytes.read(128))
+            if 'audio' in magic_number.type:
+                return magic_number.extension[0]
 
 class SSPMParser:
     def __init__(self):

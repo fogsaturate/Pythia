@@ -7,7 +7,16 @@ audio_settings = globals.settings.audio_settings
 class SyncManager:
     def __init__(self, sspm: SSPM):
         audio_data = sspm.audio_data
-        self.music_stream: rl.Music = rl.load_music_stream_from_memory(".mp3", audio_data, len(audio_data))
+
+        audio_extension: str = sspm.CheckAudioFormat(audio_data)
+
+        match audio_extension:
+            case "oga":
+                audio_extension = ".ogg"
+            case "mp3":
+                audio_extension = ".mp3"
+
+        self.music_stream: rl.Music = rl.load_music_stream_from_memory(audio_extension, audio_data, len(audio_data))
 
         self.start_time = 0.0
         self.time = 0.0 # Will be counted in update()

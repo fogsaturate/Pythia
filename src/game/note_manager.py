@@ -7,8 +7,8 @@ note_settings = globals.settings.note_settings
 
 class NoteManager:
     def __init__(self):
-        self.note_model = rl.load_model("assets/meshes/Square.obj")
-        rotate_y: float = math.radians(90)
+        self.note_model = rl.load_model("assets/meshes/Squircle.obj")
+        rotate_y: float = math.radians(0)
 
         # # self.note_model.materials[0].maps[rl.MATERIAL_MAP_DIFFUSE].color = rl.WHITE
         # self.transform = rl.matrix_scale(0.875,0.875,0.875)
