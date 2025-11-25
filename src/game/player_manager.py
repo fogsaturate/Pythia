@@ -45,9 +45,9 @@ class PlayerManager:
         # Input/Cursor Movement Logic
 
         relative = rl.Vector2(rl.get_mouse_delta().x, rl.get_mouse_delta().y)
+        window_size: rl.Vector2 = rl.Vector2(rl.get_screen_width(), rl.get_screen_height())
 
         if player_settings.absolute_mode:
-            window_size: rl.Vector2 = rl.Vector2(rl.get_screen_width(), rl.get_screen_height())
             position: rl.Vector2 = rl.get_mouse_position()
             center: rl.Vector2 = rl.Vector2(window_size.x / 2, window_size.y / 2)
             relative = rl.vector2_subtract(position, center)
@@ -83,7 +83,9 @@ class PlayerManager:
 
         if player_settings.cursor_drift:
             self.cursor_position = self.clamped_cursor_position
-
+        
+        if not self.spin:
+            self.camera.target = rl.Vector3(self.camera.position.x, self.camera.position.y, 0)
 
 
     # Draw Update (for cursor textures n such)
@@ -93,15 +95,11 @@ class PlayerManager:
 
         abs_distance = self.max_abs(self.cursor_position.x, self.cursor_position.y)
         if not player_settings.cursor_drift and abs_distance > 2.7375:
-
             if player_settings.buffer_cursor_fade_distance != 0.0:
                 ghost_cursor_color = rl.Color(255,255,255,0)
                 ghost_cursor_color.a = self.range_normalized(abs_distance, 2.7375, 2.7375 + abs(player_settings.buffer_cursor_fade_distance))
-
                 rl.draw_model(self.cursor_plane, [self.cursor_position.x, self.cursor_position.y, 0.0], 1.0, ghost_cursor_color)
-
             else:
-
                 rl.draw_model(self.cursor_plane, [self.cursor_position.x, self.cursor_position.y, 0.0], 1.0, rl.WHITE)
 
     # Input Handling
