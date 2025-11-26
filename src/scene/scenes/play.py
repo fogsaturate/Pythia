@@ -46,23 +46,31 @@ class PlayScene:
 
         self.draw_health(self.coordinator.scoremgr.health)
 
-        # Statistics
+        # Statistics -------
         rl.draw_text(f"Hits: {str(self.coordinator.scoremgr.hits)}", 50, 75, 20, rl.WHITE)
         rl.draw_text(f"Misses: {str(self.coordinator.scoremgr.misses)}", 50, 100, 20, rl.RED)
-
         rl.draw_text(f"x{str(self.coordinator.scoremgr.combo)}", 30, rl.get_screen_height() - 65, 55, rl.WHITE)
 
-        # Accuracy
+        # Time Bar -------
+        time_bar_padding = 5
+        rl.draw_rectangle_v([0,rl.get_screen_height() - time_bar_padding], [rl.get_screen_width(), time_bar_padding], rl.GRAY)
+        time_normalized = rl.normalize(self.coordinator.syncmgr.get_sync_time(), 0, self.coordinator.syncmgr.song_length)
+        rl.draw_rectangle_v([0,rl.get_screen_height() - time_bar_padding], [time_normalized * rl.get_screen_width(), time_bar_padding], rl.WHITE)
+
+        # Accuracy -------
         acc: str = f"{self.coordinator.scoremgr.accuracy * 100:.2f}%"
         acc_width = rl.measure_text(acc, 35)
         x_center = (rl.get_screen_width() / 2) - (acc_width / 2)
-
         rl.draw_text(acc, int(x_center), 50, 35, rl.YELLOW)
+
+        # 3D Manager Draw -------
 
         rl.begin_mode_3d(self.coordinator.playermgr.camera)
 
         self.coordinator.notemgr.update_notes()
         self.coordinator.playermgr.draw()
+
+        # Grid
         rl.draw_model(self.border_plane, [0.0,0.0,0.0], 1.0, rl.WHITE)
 
         rl.end_mode_3d()
@@ -96,8 +104,8 @@ class PlayScene:
         tweened_health = last_health_normalized + (normalized_health - last_health_normalized) * ease
 
         rec_pos: rl.Vector2 = rl.Vector2(0,0) # x, y
-        # Multiply to 1920 to fill it back up!
-        rec_size: rl.Vector2 = rl.Vector2(tweened_health * 1920, 8) # width, height
+        # Multiply to 1920 to stretch it across the screen
+        rec_size: rl.Vector2 = rl.Vector2(tweened_health * rl.get_screen_width(), 8) # width, height
 
         rl.draw_rectangle_v(rec_pos, rec_size, health_color)
 

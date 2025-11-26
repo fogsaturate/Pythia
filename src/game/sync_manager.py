@@ -27,6 +27,7 @@ class SyncManager:
         self.time = 0.0 # Will be counted in update()
 
         self.started = False
+        self.song_length = rl.get_music_time_length(self.music_stream)
 
         # This gets a minimum to prevent it from being negative
         self.from_time = min(audio_settings.start_from_time, 0.0)
