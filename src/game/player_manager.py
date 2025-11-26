@@ -74,8 +74,8 @@ class PlayerManager:
         look = rl.vector3_subtract(self.camera.target, self.camera.position)
 
         self.camera.position = rl.vector3_add(pivot, rl.Vector3(
-            self.clamped_cursor_position.x * (self.parallax / 4) + (look.x / 2.0),
-            self.clamped_cursor_position.y * (self.parallax / 4) + (look.y / 2.0),
+            (self.clamped_cursor_position.x * self.parallax / 4) + (look.x / 2.0),
+            (self.clamped_cursor_position.y * self.parallax / 4) + (look.y / 2.0),
             0
         ))
 
