@@ -66,11 +66,27 @@ class NoteManager:
 
             self.note_model.transform = self.transform
 
-            alpha: float = None
+            
+            fade_in = None
+            fade_out = None
+
             if note_settings.fade_in != 0:
-                alpha = self.clamp((1 - progress) / (self.clamp(note_settings.fade_in, 0.0, 1.0)), 0, 1)
+                fade_in = self.clamp((1 - progress) / note_settings.fade_in, 0, 1)
             else:
-                alpha = 1.0
+                fade_in = 1.0
+            
+
+            if note_settings.half_ghost:
+                # im copying ssplus i dont care
+                fade_out_base = 0.8
+                fade_out_start = 0.24
+                fade_out_end = 0.06
+
+                fade_out = ((1 - fade_out_base) + (pow(self.linear_step(fade_out_end,fade_out_start, progress), 1.3) * fade_out_base))
+            else:
+                fade_out = 1.0
+
+            alpha = min(fade_in, fade_out)
             # I can just use the same color here since the fade function just changes the alpha
             note_color.a = rl.fade(note_color, alpha).a
 
@@ -142,5 +158,8 @@ class NoteManager:
     def range_normalized(self, x, mn, mx):
         x = self.clamp(x, mn, mx)
         return int((x - mn) / (mx - mn) * 255)
+    
+    def linear_step(self, mn, mx, step):
+        return self.clamp((step - mn) / (mx - mn), 0, 1)
 
 
