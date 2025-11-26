@@ -17,7 +17,7 @@ class NoteManager:
         
         self.transform = rl.matrix_rotate_y(rotate_y)
 
-        self.approach_rate = note_settings.approach_rate
+        self.approach_rate = note_settings.approach_rate / speed
         self.approach_distance = note_settings.approach_distance
         self.approach_time = self.approach_distance / self.approach_rate
 
