@@ -1,5 +1,6 @@
 import math
 from map.format.sspm import SSPM
+import pyray as rl
 
 class ScoreManager:
     def __init__(self):
@@ -13,6 +14,8 @@ class ScoreManager:
         self.max_combo: int = 0
 
         self.health: int = 40
+        self.last_health: int = 40
+        self.health_time: float = 0 # will be used for easing
         self.failed = False
     
     def add_hit(self):
@@ -22,7 +25,9 @@ class ScoreManager:
         self.update_accuracy()
 
         if self.health < 40 and not self.failed:
+            self.last_health = self.health
             self.health = min(self.health + 5, 40)
+            self.health_time = rl.get_time()
 
     def add_miss(self):
         self.misses += 1
@@ -30,7 +35,9 @@ class ScoreManager:
         self.update_accuracy()
 
         if not self.failed:
+            self.last_health = self.health
             self.health = max(self.health - 8, 0)
+            self.health_time = rl.get_time()
             if self.health == 0: self.failed = True
     
     def update_accuracy(self):

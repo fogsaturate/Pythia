@@ -155,10 +155,6 @@ class NoteManager:
     def clamp(self, v, mn, mx):
         return max(min(v, mx), mn)
     
-    def range_normalized(self, x, mn, mx):
-        x = self.clamp(x, mn, mx)
-        return int((x - mn) / (mx - mn) * 255)
-    
     def linear_step(self, mn, mx, step):
         return self.clamp((step - mn) / (mx - mn), 0, 1)
 
