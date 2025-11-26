@@ -9,7 +9,7 @@ class NoteSettings:
     note_pushback: bool = True
     color_set: list[str] = field(default_factory=lambda: ["#00ffed", "ff8ff9"])
 
-    half_ghost: bool = False # Unused
+    half_ghost: bool = False
 
     def as_dict(self):
         return {
