@@ -34,6 +34,8 @@ class SyncManager:
         # This gets an absolute since people might mistake it for being opposite
         self.warm_up_time = abs(audio_settings.warm_up_time)
 
+        self.finished = False
+
     def start(self):
         rl.set_music_volume(self.music_stream, audio_settings.song_volume)
         rl.play_music_stream(self.music_stream)
@@ -53,11 +55,15 @@ class SyncManager:
                 rl.play_music_stream(self.music_stream)
                 rl.seek_music_stream(self.music_stream, syncmgr_time)
                 self.started = True
-            else:
+            elif self.get_sync_time() < self.song_length:
                 # Re-syncs the map, but only after it starts
                 if abs(syncmgr_time - music_time) > threshold:
                     print(f"Resynced, offsync difference was {abs(syncmgr_time - music_time)}!")
                     rl.seek_music_stream(self.music_stream, syncmgr_time)
+            elif self.get_sync_time() > self.song_length:
+                self.finished = True
+                rl.stop_music_stream(self.music_stream)
+                rl.unload_music_stream(self.music_stream)
             
             rl.update_music_stream(self.music_stream)
 
