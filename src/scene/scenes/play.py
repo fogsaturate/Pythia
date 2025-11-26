@@ -42,13 +42,13 @@ class PlayScene:
         rl.begin_drawing()
         rl.clear_background(rl.BLACK)
 
-        rl.draw_fps(50,50)
+        rl.draw_fps(20,20)
 
         self.draw_health(self.coordinator.scoremgr.health)
 
         # Statistics -------
-        rl.draw_text(f"Hits: {str(self.coordinator.scoremgr.hits)}", 50, 75, 20, rl.WHITE)
-        rl.draw_text(f"Misses: {str(self.coordinator.scoremgr.misses)}", 50, 100, 20, rl.RED)
+        rl.draw_text(f"Hits: {str(self.coordinator.scoremgr.hits)}", 50, 75, 30, rl.WHITE)
+        rl.draw_text(f"Misses: {str(self.coordinator.scoremgr.misses)}", 50, 115, 30, rl.RED)
         rl.draw_text(f"x{str(self.coordinator.scoremgr.combo)}", 30, rl.get_screen_height() - 65, 55, rl.WHITE)
 
         # Time Bar -------
@@ -61,7 +61,7 @@ class PlayScene:
         acc: str = f"{self.coordinator.scoremgr.accuracy * 100:.2f}%"
         acc_width = rl.measure_text(acc, 35)
         x_center = (rl.get_screen_width() / 2) - (acc_width / 2)
-        rl.draw_text(acc, int(x_center), 50, 35, rl.YELLOW)
+        rl.draw_text(acc, int(x_center), 50, 35, rl.WHITE)
 
         # 3D Manager Draw -------
 
