@@ -44,24 +44,20 @@ class PlayScene:
 
         rl.draw_fps(50,50)
 
-        # health_color: rl.Color = rl.GREEN
-        # if self.coordinator.scoremgr.health == 0:
-        #     health_color = rl.GRAY
-        # elif self.coordinator.scoremgr.health < 10:
-        #     health_color = rl.RED
-        # elif self.coordinator.scoremgr.health < 20:
-        #     health_color = rl.YELLOW
-        # elif self.coordinator.scoremgr.health < 30:
-        #     health_color = rl.GREEN
-        # rl.draw_text(f"Health: {str(self.coordinator.scoremgr.health)}", 50, 125, 40, health_color)
         self.draw_health(self.coordinator.scoremgr.health)
 
+        # Statistics
         rl.draw_text(f"Hits: {str(self.coordinator.scoremgr.hits)}", 50, 75, 20, rl.WHITE)
         rl.draw_text(f"Misses: {str(self.coordinator.scoremgr.misses)}", 50, 100, 20, rl.RED)
 
         rl.draw_text(f"x{str(self.coordinator.scoremgr.combo)}", 30, rl.get_screen_height() - 65, 55, rl.WHITE)
 
-        rl.draw_text(f"{self.coordinator.scoremgr.accuracy * 100:.2f}%", int(rl.get_screen_width() / 2), 50, 24, rl.YELLOW)
+        # Accuracy
+        acc: str = f"{self.coordinator.scoremgr.accuracy * 100:.2f}%"
+        acc_width = rl.measure_text(acc, 35)
+        x_center = (rl.get_screen_width() / 2) - (acc_width / 2)
+
+        rl.draw_text(acc, int(x_center), 50, 35, rl.YELLOW)
 
         rl.begin_mode_3d(self.coordinator.playermgr.camera)
 
