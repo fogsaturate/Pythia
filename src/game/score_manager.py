@@ -44,4 +44,6 @@ class ScoreManager:
         self.total: int = self.hits + self.misses
         if self.misses == 0:
             return 1.0
+        elif self.hits == 0:
+            return 0.0
         self.accuracy: float = round(1.0 if self.hits <= 0 else self.hits / self.total, 4)
