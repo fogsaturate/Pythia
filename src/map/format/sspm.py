@@ -4,6 +4,8 @@ from enum import Enum
 from dataclasses import dataclass, field
 import fleep
 import io
+import warnings
+from raylib import Vector2
 
 class Difficulty(Enum):
     NA = 0
@@ -57,6 +59,7 @@ class SSPM:
             magic_number = fleep.get(file_bytes.read(128))
             if 'audio' in magic_number.type:
                 return magic_number.extension[0]
+        return "mp3" # fallback
 
 class SSPMParser:
     def __init__(self):
@@ -100,6 +103,7 @@ class SSPMParser:
         self.markers: dict = {}
         self.note_list: list[Note] = [] # for actual in-game parsing
 
+    # Good luck getting ANY type checker to NOT error on this method
     def data_types(self, file: BinaryIO, data_type: int):
         binary_reader = BinaryReader(file)
         match data_type:
@@ -121,11 +125,11 @@ class SSPMParser:
                 if not note_storage_type:
                     x = binary_reader.read_uint8()
                     y = binary_reader.read_uint8()
-                    return x, y
+                    return [x, y]
                 else:
                     x = binary_reader.read_single()
                     y = binary_reader.read_single()
-                    return x, y
+                    return [x, y]
 
             case 8: # short buffer
                 buffer_length = binary_reader.read_uint16()
@@ -139,14 +143,26 @@ class SSPMParser:
                 return binary_reader.read_string_buffer(4)
             case 12: # array
                 data_type_array = []
-
-                array_data_type_length = binary_reader.read_uint32() # not even i know what this means
+                
+                array_data_type_length = binary_reader.read_uint32() # Length of the array's contents (two 8 bit ints would make it 16 bits)
                 array_object_count = binary_reader.read_uint16()
 
+                # validation checking
+                start = file.tell()
+
                 array_data_type = binary_reader.read_uint8()
-                for i in range(array_object_count):
+                for _ in range(array_object_count):
                     data_type_array.append(self.data_types(file, array_data_type))
+
+                end = file.tell()
+                array_length = end - start
+
+                if array_length != array_data_type_length:
+                    warnings.warn(f"Array's length mismatched! Parsed: {array_length}, Iterated: {array_data_type_length}")
+                
                 return data_type_array
+            case _:
+                raise ValueError(f"Unknown data type in SSPMv2: {data_type}")
 
 
 
@@ -288,11 +304,13 @@ class SSPMParser:
                     "marker_object_data" : []
                 }
 
+                # TODO: This can definitely be optimized more
+
                 if data_type == 7:
-                    marker_value = self.data_types(file, data_type)
-                    marker_value_x, marker_value_y = marker_value
-                    x = marker_value_x - 1
-                    y = -marker_value_y + 1
+                    marker_value: list[float | int] = self.data_types(file, data_type)
+                    note_vector = Vector2(marker_value[0], marker_value[1])
+                    x = note_vector.x - 1
+                    y = -note_vector.y + 1
                     marker_data_dict["marker_object_data"].append({"x": x, "y": y})
 
                     new_note = Note()

@@ -6,12 +6,12 @@ from game.score_manager import ScoreManager
 
 class Coordinator:
     def __init__(self):
-        self.notemgr: NoteManager = None
-        self.playermgr: PlayerManager = None
-        self.syncmgr: SyncManager = None
-        self.scoremgr: ScoreManager = None
+        self.notemgr: NoteManager | None = None
+        self.playermgr: PlayerManager | None = None
+        self.syncmgr: SyncManager | None = None
+        self.scoremgr: ScoreManager | None = None
 
-        self.sspm_map: SSPM = None
+        self.sspm_map: SSPM | None = None
     
     def init_notemgr(self):
         self.notemgr = NoteManager()
