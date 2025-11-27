@@ -131,7 +131,7 @@ class NoteManager:
     # Conversion Library
 
     def str_to_color(self, hex: str) -> rl.Color:
-        hex_str: str = None
+        hex_str: str = ""
 
         if "#" in hex:
             hex_str = hex.replace("#", "") # Get rid of the optional # character

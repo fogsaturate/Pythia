@@ -5,6 +5,7 @@ from map.format.sspm import SSPMParser
 import globals
 import os
 import threading
+import platform
 
 class InitScene:
     def __init__(self, scene_manager):
@@ -16,9 +17,7 @@ class InitScene:
         if fps_setting != 0:
             rl.set_target_fps(fps_setting)
 
-        appdata_roaming = os.getenv("APPDATA")
-        self.ssp_folder = os.path.join(appdata_roaming, "SoundSpacePlus")
-        self.map_folder = os.path.join(self.ssp_folder, "maps")
+        self.map_folder = self.default_ssp_maps_folder()
 
         self.filename = None
 
@@ -28,7 +27,7 @@ class InitScene:
         # self.scene_manager.switch_scene(SceneEnum.PLAY)
     
     def decoding_thread(self):
-        if os.path.isdir(self.ssp_folder):
+        if os.path.isdir(self.map_folder):
             self.filename = fd.askopenfilename(initialdir=self.map_folder)
         else:
             self.filename = fd.askopenfilename()
@@ -52,3 +51,21 @@ class InitScene:
             if globals.settings.fullscreen:
                 rl.toggle_fullscreen()
             self.scene_manager.switch_scene(SceneEnum.PLAY)
+
+    def default_ssp_maps_folder(self) -> str:
+        os_string: str = platform.system()
+
+        map_folder = ""
+
+        if os_string == "Windows":
+            appdata_roaming = os.getenv("APPDATA") or ""
+            ssp_folder = os.path.join(appdata_roaming, "SoundSpacePlus")
+            
+            map_folder = os.path.join(ssp_folder, "maps")
+        elif os_string == "Linux":
+            home_folder = os.path.expanduser("~")
+            ssp_folder = os.path.join(home_folder, ".local/share/SoundSpacePlus")
+
+            map_folder = os.path.join(ssp_folder, "maps")
+        
+        return map_folder

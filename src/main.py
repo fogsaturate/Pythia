@@ -1,4 +1,5 @@
 import pyray as rl
+from raylib import FLAG_MSAA_4X_HINT
 import scene.scene_manager as scene_manager
 from globals import settings
 
@@ -7,7 +8,7 @@ def main():
     screen_width = settings.width
     screen_height = settings.height
 
-    rl.set_config_flags(rl.FLAG_MSAA_4X_HINT)
+    rl.set_config_flags(FLAG_MSAA_4X_HINT)
 
     rl.init_window(screen_width, screen_height, "Pythia")
     rl.init_audio_device()
