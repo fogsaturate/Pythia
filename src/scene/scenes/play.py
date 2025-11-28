@@ -36,7 +36,7 @@ class PlayScene:
     def update(self):
         # 3D Scene
 
-        # self.coordinator.playermgr.update()
+        self.coordinator.playermgr.update()
         self.coordinator.syncmgr.update()
 
         rl.begin_drawing()
@@ -71,7 +71,6 @@ class PlayScene:
 
         self.coordinator.notemgr.update_notes()
         self.coordinator.playermgr.draw()
-        self.coordinator.playermgr.update()
 
 
         # Grid

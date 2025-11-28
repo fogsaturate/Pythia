@@ -47,6 +47,9 @@ class SettingsManager:
         # Note Settings
         note_obj = json_obj["note_settings"]
 
+        self.settings.note_settings.mesh_path = "assets/meshes/" + note_obj["mesh_path"]
+        self.settings.note_settings.mesh_rotation_offset = note_obj["mesh_rotation_offset"]
+
         self.settings.note_settings.approach_rate = note_obj["approach_rate"]
         self.settings.note_settings.approach_distance = note_obj["approach_distance"]
         self.settings.note_settings.fade_in = note_obj["fade_in"]

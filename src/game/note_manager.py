@@ -8,14 +8,16 @@ speed = globals.settings.player_settings.speed
 
 class NoteManager:
     def __init__(self):
-        self.note_model = rl.load_model("assets/meshes/Squircle.obj")
-        rotate_y: float = math.radians(0)
+        self.note_model = rl.load_model(note_settings.mesh_path)
+
+        mesh_rotation = note_settings.mesh_rotation_offset
+        model_rotate = rl.Vector3(math.radians(mesh_rotation[0]), math.radians(mesh_rotation[1]), math.radians(mesh_rotation[2]))
 
         # # self.note_model.materials[0].maps[rl.MATERIAL_MAP_DIFFUSE].color = rl.WHITE
         # self.transform = rl.matrix_scale(0.875,0.875,0.875)
         # self.transform = rl.matrix_multiply(self.transform, rl.matrix_rotate_y(rotate_y))
         
-        self.transform = rl.matrix_rotate_y(rotate_y)
+        self.transform = rl.matrix_rotate_xyz(model_rotate)
 
         self.approach_rate = note_settings.approach_rate / speed
         self.approach_distance = note_settings.approach_distance

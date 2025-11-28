@@ -2,6 +2,10 @@ from dataclasses import dataclass, field
 
 @dataclass
 class NoteSettings:
+
+    mesh_path: str = "Square.obj" # default path is assets/meshes/
+    mesh_rotation_offset: list = field(default_factory=lambda: [0,90,0]) # pitch, yaw, roll 
+
     approach_rate: float = 20
     approach_distance: float = 12
     fade_in: float = 0.25
@@ -13,6 +17,8 @@ class NoteSettings:
 
     def as_dict(self):
         return {
+            "mesh_path": self.mesh_path,
+            "mesh_rotation_offset": self.mesh_rotation_offset,
             "approach_rate": self.approach_rate,
             "approach_distance": self.approach_distance,
             "fade_in": self.fade_in,
