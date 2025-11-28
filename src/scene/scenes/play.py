@@ -36,7 +36,7 @@ class PlayScene:
     def update(self):
         # 3D Scene
 
-        self.coordinator.playermgr.update()
+        # self.coordinator.playermgr.update()
         self.coordinator.syncmgr.update()
 
         rl.begin_drawing()
@@ -44,7 +44,9 @@ class PlayScene:
 
         rl.draw_fps(20,20)
 
-        self.draw_health(self.coordinator.scoremgr.health)
+        # no need for health calculations if no health to be generated!
+        if self.coordinator.scoremgr.health != 0:
+            self.draw_health(self.coordinator.scoremgr.health)
 
         # Statistics -------
         rl.draw_text(f"Hits: {str(self.coordinator.scoremgr.hits)}", 50, 75, 30, rl.WHITE)
@@ -69,6 +71,8 @@ class PlayScene:
 
         self.coordinator.notemgr.update_notes()
         self.coordinator.playermgr.draw()
+        self.coordinator.playermgr.update()
+
 
         # Grid
         rl.draw_model(self.border_plane, [0.0,0.0,0.0], 1.0, rl.WHITE)

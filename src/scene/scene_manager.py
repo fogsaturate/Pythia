@@ -1,6 +1,7 @@
 from scene.scene_enum import SceneEnum
 from scene.scenes.init import InitScene
 from scene.scenes.play import PlayScene
+import cProfile
 
 # This will also be used as my global variables container
 
@@ -21,6 +22,7 @@ class SceneManager:
 
     def render_scene(self):
         self.get_scene_int().update()
+
     
     def switch_scene(self, switch_int: SceneEnum):
         self.scene_int = switch_int
