@@ -93,13 +93,23 @@ class PlayerManager:
     def draw(self):
         rl.draw_model(self.cursor_plane, [self.clamped_cursor_position.x, self.clamped_cursor_position.y, 0.0], 1.0, rl.WHITE)
 
-        abs_distance = self.max_abs(self.cursor_position.x, self.cursor_position.y)
-        if not player_settings.cursor_drift and abs_distance > 2.7375:
+        if self.cursor_position.x != self.clamped_cursor_position.x or self.cursor_position.y != self.clamped_cursor_position.y:
             if player_settings.buffer_cursor_fade_distance != 0.0:
-                ghost_cursor_color = rl.Color(255,255,255,0)
-                ghost_cursor_color.a = self.range_normalized(abs_distance, 2.7375, 2.7375 + abs(player_settings.buffer_cursor_fade_distance))
+                over_clamp_pos: rl.Vector2 = rl.Vector2(
+                    max(0.0, abs(self.cursor_position.x) - 2.7375),
+                    max(0.0, abs(self.cursor_position.y) - 2.7375)
+                )
+
+                over_clamp = max(over_clamp_pos.x, over_clamp_pos.y)
+
+                alpha = min(over_clamp / player_settings.buffer_cursor_fade_distance, 1)
+
+                ghost_cursor_color = rl.Color(255,255,255, int(alpha * 255))
+
+                # ghost_cursor_color.a = self.range_normalized(abs_distance, 2.7375, 2.7375 + abs(player_settings.buffer_cursor_fade_distance))
                 rl.draw_model(self.cursor_plane, [self.cursor_position.x, self.cursor_position.y, 0.0], 1.0, ghost_cursor_color)
             else:
+                print("not drawing")
                 rl.draw_model(self.cursor_plane, [self.cursor_position.x, self.cursor_position.y, 0.0], 1.0, rl.WHITE)
 
     # Input Handling
