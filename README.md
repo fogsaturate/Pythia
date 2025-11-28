@@ -14,3 +14,12 @@ pyinstaller src/main.py --onefile --add-data ".venv/Lib/site-packages/fleep/data
 ```
 pyinstaller src/main.py --onefile --add-data ".venv/lib/python3.13/site-packages/fleep/data.json:fleep"
 ```
+
+For those using pyright, put this in the repo folder
+```json
+// pyrightconfig.json
+{
+  "venvPath": "./",
+  "venv": ".venv"
+}
+```
