@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 import fleep
 import io
 import warnings
-from raylib import Vector2
+import pyray as rl
 
 class Difficulty(Enum):
     NA = 0
@@ -308,7 +308,7 @@ class SSPMParser:
 
                 if data_type == 7:
                     marker_value: list[float | int] = self.data_types(file, data_type)
-                    note_vector = Vector2(marker_value[0], marker_value[1])
+                    note_vector = rl.Vector2(marker_value[0], marker_value[1])
                     x = note_vector.x - 1
                     y = -note_vector.y + 1
                     marker_data_dict["marker_object_data"].append({"x": x, "y": y})

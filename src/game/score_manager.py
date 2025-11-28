@@ -1,6 +1,7 @@
 import math
 from map.format.sspm import SSPM
 import pyray as rl
+import globals
 
 class ScoreManager:
     def __init__(self):
@@ -17,6 +18,8 @@ class ScoreManager:
         self.last_health: int = 40
         self.health_time: float = 0 # will be used for easing
         self.failed = False
+
+        self.syncmgr = globals.coordinator.syncmgr
     
     def add_hit(self):
         self.hits += 1
@@ -27,7 +30,7 @@ class ScoreManager:
         if self.health < 40 and not self.failed:
             self.last_health = self.health
             self.health = min(self.health + 5, 40)
-            self.health_time = rl.get_time()
+            self.health_time = self.syncmgr.get_sync_time()
 
     def add_miss(self):
         self.misses += 1
@@ -37,7 +40,7 @@ class ScoreManager:
         if not self.failed:
             self.last_health = self.health
             self.health = max(self.health - 8, 0)
-            self.health_time = rl.get_time()
+            self.health_time = self.syncmgr.get_sync_time()
             if self.health == 0: self.failed = True
     
     def update_accuracy(self):

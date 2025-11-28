@@ -93,7 +93,7 @@ class PlayScene:
         # How long the tween lasts
         tween_duration = 0.1
         # Time since last health hit
-        health_progress = rl.get_time() - self.coordinator.scoremgr.health_time
+        health_progress = self.coordinator.syncmgr.get_sync_time() - self.coordinator.scoremgr.health_time
         # Stop the health progress at duration
         step = self.clamp(health_progress / tween_duration, 0, 1)
 
