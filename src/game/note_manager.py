@@ -71,7 +71,7 @@ class NoteManager:
             fade_out = None
 
             if note_settings.fade_in != 0:
-                fade_in = self.clamp((1 - progress) / note_settings.fade_in, 0, 1)
+                fade_in = max((1 - progress) / note_settings.fade_in, 1)
             else:
                 fade_in = 1.0
             
@@ -88,7 +88,7 @@ class NoteManager:
 
             alpha = min(fade_in, fade_out)
             # I can just use the same color here since the fade function just changes the alpha
-            note_color.a = rl.fade(note_color, alpha).a
+            note_color.a = int(alpha * 255)
 
             # If note is past the border and pushback is off, then skip rendering
             if time_difference > 0 and not note_settings.note_pushback:
@@ -97,7 +97,6 @@ class NoteManager:
                 rl.draw_model(self.note_model, position, 1.0, note_color)
 
         # Hit Detection Logic
-        hits: list[Note] = []
         for note in self.visible_notes:
             # Skip this note if it hasn't passed the border yet
             if map_time < note.time:
@@ -109,24 +108,23 @@ class NoteManager:
             )
 
             if aabb <= 1.1375:
-                hits.append(note)
+                note.hit = True
+        
+        # Note Removal/Miss Detection Logic
+
+        visible_notes_cont = []
+        for note in self.visible_notes:
+            if note.hit:
                 globals.coordinator.scoremgr.add_hit()
-        
-        # Made a new list so it doesn't cycle in itself
-        for note in hits:
-            self.visible_notes.remove(note)
-        
-        # Miss Detection Logic
-        # If there are visible notes on-screen, continue
-        while len(self.visible_notes) > 0:
-            note = self.visible_notes[0]
+                continue
+            elif map_time >= note.time + self.hit_window:
+                globals.coordinator.scoremgr.add_miss()
+                continue
+            else:
+                visible_notes_cont.append(note)
+        self.visible_notes = visible_notes_cont
 
-            # If the note hasn't passed the border AND the hit window, then skip
-            if map_time < note.time + self.hit_window:
-                break
 
-            globals.coordinator.scoremgr.add_miss()
-            self.visible_notes.pop(0)
 
     # Conversion Library
 
