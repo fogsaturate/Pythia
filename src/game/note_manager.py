@@ -54,7 +54,7 @@ class NoteManager:
             self.next_note += 1
 
         # Note Rendering Logic
-        for note in self.visible_notes:
+        for note in reversed(self.visible_notes):
             
             note_color: rl.Color = self.colors[note.index % len(self.colors)]
 
