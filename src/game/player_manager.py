@@ -16,7 +16,6 @@ class PlayerManager:
         self.camera.up = [0.0, 1.0, 0.0]
         self.camera.fovy = 70
         self.camera.projection = 0
-        self.camera_pivot = self.camera.position
 
         self.parallax = player_settings.parallax
         self.sensitivity = math.radians(player_settings.sensitivity)
@@ -62,23 +61,20 @@ class PlayerManager:
             self.update_lock(motion)
             
         # Parallax Calculation (Direct translation of kermeet's math, thank you)
-
         self.clamped_cursor_position = rl.Vector2(
             self.clamp(self.cursor_position.x, -2.7375, 2.7375),
             self.clamp(self.cursor_position.y, -2.7375, 2.7375)
         )
-
         pivot = rl.Vector3(0.0, 0.0, 7.0)
 
         # Simulation of Godot's Basis.Z
         look = rl.vector3_subtract(self.camera.target, self.camera.position)
 
         self.camera.position = rl.vector3_add(pivot, rl.Vector3(
-            (self.clamped_cursor_position.x * self.parallax / 4) + (look.x / 2.0),
-            (self.clamped_cursor_position.y * self.parallax / 4) + (look.y / 2.0),
+            (-self.clamped_cursor_position.x * self.parallax / 4) + (look.x / 2.0),
+            (-self.clamped_cursor_position.y * self.parallax / 4) + (look.y / 2.0),
             0
         ))
-
         # End of Parallax Calculation
 
         if player_settings.cursor_drift:
@@ -119,11 +115,16 @@ class PlayerManager:
         rl.update_camera_pro(self.camera, [0,0,0], [motion.x * 7.5, -motion.y * 7.5, 0.0], 0.0)
 
         look = rl.vector3_subtract(self.camera.target, self.camera.position)
+
+        look_vector2 = rl.Vector2(look.x, look.y)
+        camera_vector2 = rl.Vector2(self.camera.position.x, self.camera.position.y)
+        
         if look.z != 0:
-            self.cursor_position = rl.Vector2(
-                self.camera.position.x - look.x * self.camera.position.z / look.z,
-                self.camera.position.y - look.y * self.camera.position.z / look.z
+            z_correction = rl.Vector2(
+                look_vector2.x * abs(self.camera.position.z / look.z),
+                look_vector2.y * abs(self.camera.position.z / look.z)
             )
+            self.cursor_position = rl.vector2_add(camera_vector2, z_correction)
     
     def update_lock(self, motion: rl.Vector2):
         self.camera.target = rl.Vector3(self.camera.position.x, self.camera.position.y, 0)
