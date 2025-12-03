@@ -7,6 +7,8 @@ import globals
 
 player_settings = globals.settings.player_settings
 
+cam_pos = rl.Vector3(0,0,7.5)
+
 class PlayerManager:
     def __init__(self):
         self.camera = rl.Camera3D()
@@ -60,28 +62,29 @@ class PlayerManager:
         else:
             self.update_lock(motion)
             
-        # Parallax Calculation (Direct translation of kermeet's math, thank you)
         self.clamped_cursor_position = rl.Vector2(
             self.clamp(self.cursor_position.x, -2.7375, 2.7375),
             self.clamp(self.cursor_position.y, -2.7375, 2.7375)
         )
         pivot = rl.Vector3(0.0, 0.0, 7.0)
 
-        # Simulation of Godot's Basis.Z
-        look = rl.vector3_subtract(self.camera.target, self.camera.position)
+        # Parallax Calculation (Direct translation of kermeet's math, thank you)
 
-        self.camera.position = rl.vector3_add(pivot, rl.Vector3(
+        cam_pos = rl.vector3_add(pivot, rl.Vector3(
             (self.clamped_cursor_position.x * self.parallax / 4),
             (self.clamped_cursor_position.y * self.parallax / 4),
             0
         ))
+
         # End of Parallax Calculation
 
         if player_settings.cursor_drift:
             self.cursor_position = self.clamped_cursor_position
         
         if not self.spin:
-            self.camera.target = rl.Vector3(self.camera.position.x, self.camera.position.y, 0)
+            self.camera.target = rl.Vector3(cam_pos.x, cam_pos.y, 0)
+
+        self.camera.position = cam_pos
 
 
     # Draw Update (for cursor textures n such)
@@ -112,26 +115,22 @@ class PlayerManager:
 
     def update_spin(self, motion: rl.Vector2):
 
-        # for now, this shall be the solution for low FPS spazzes
-        self.cursor_position = rl.vector2_add(self.cursor_position, motion)
-        self.camera.target = rl.Vector3(self.cursor_position.x, self.cursor_position.y, 0)
+        rl.update_camera_pro(self.camera, [0,0,0], [motion.x * 7.5, -motion.y * 7.5, 0.0], 0.0)
 
-        # rl.update_camera_pro(self.camera, [0,0,0], [motion.x * 7.5, -motion.y * 7.5, 0.0], 0.0)
+        look = rl.vector3_subtract(self.camera.target, cam_pos)
 
-        # look = rl.vector3_subtract(self.camera.target, self.camera.position)
-
-        # look_vector2 = rl.Vector2(look.x, look.y)
-        # camera_vector2 = rl.Vector2(self.camera.position.x, self.camera.position.y)
+        look_vector2 = rl.Vector2(look.x, look.y)
+        camera_vector2 = rl.Vector2(cam_pos.x, cam_pos.y)
         
-        # if look.z != 0:
-        #     z_correction = rl.Vector2(
-        #         look_vector2.x * abs(self.camera.position.z / look.z),
-        #         look_vector2.y * abs(self.camera.position.z / look.z)
-        #     )
-        #     self.cursor_position = rl.vector2_add(camera_vector2, z_correction)
+        if look.z != 0:
+            z_correction = rl.Vector2(
+                look_vector2.x * abs(cam_pos.z / look.z),
+                look_vector2.y * abs(cam_pos.z / look.z)
+            )
+            self.cursor_position = rl.vector2_add(camera_vector2, z_correction)
     
     def update_lock(self, motion: rl.Vector2):
-        self.camera.target = rl.Vector3(self.camera.position.x, self.camera.position.y, 0)
+        self.camera.target = rl.Vector3(cam_pos.x, cam_pos.y, 0)
         self.cursor_position = rl.vector2_add(self.cursor_position, motion)
 
     # Math Functions
