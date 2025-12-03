@@ -71,8 +71,8 @@ class PlayerManager:
         look = rl.vector3_subtract(self.camera.target, self.camera.position)
 
         self.camera.position = rl.vector3_add(pivot, rl.Vector3(
-            (self.clamped_cursor_position.x * self.parallax / 4) + (look.x / 2.0),
-            (self.clamped_cursor_position.y * self.parallax / 4) + (look.y / 2.0),
+            (self.clamped_cursor_position.x * self.parallax / 4),
+            (self.clamped_cursor_position.y * self.parallax / 4),
             0
         ))
         # End of Parallax Calculation
@@ -112,19 +112,23 @@ class PlayerManager:
 
     def update_spin(self, motion: rl.Vector2):
 
-        rl.update_camera_pro(self.camera, [0,0,0], [motion.x * 7.5, -motion.y * 7.5, 0.0], 0.0)
+        # for now, this shall be the solution for low FPS spazzes
+        self.cursor_position = rl.vector2_add(self.cursor_position, motion)
+        self.camera.target = rl.Vector3(self.cursor_position.x, self.cursor_position.y, 0)
 
-        look = rl.vector3_subtract(self.camera.target, self.camera.position)
+        # rl.update_camera_pro(self.camera, [0,0,0], [motion.x * 7.5, -motion.y * 7.5, 0.0], 0.0)
 
-        look_vector2 = rl.Vector2(look.x, look.y)
-        camera_vector2 = rl.Vector2(self.camera.position.x, self.camera.position.y)
+        # look = rl.vector3_subtract(self.camera.target, self.camera.position)
+
+        # look_vector2 = rl.Vector2(look.x, look.y)
+        # camera_vector2 = rl.Vector2(self.camera.position.x, self.camera.position.y)
         
-        if look.z != 0:
-            z_correction = rl.Vector2(
-                look_vector2.x * abs(self.camera.position.z / look.z),
-                look_vector2.y * abs(self.camera.position.z / look.z)
-            )
-            self.cursor_position = rl.vector2_add(camera_vector2, z_correction)
+        # if look.z != 0:
+        #     z_correction = rl.Vector2(
+        #         look_vector2.x * abs(self.camera.position.z / look.z),
+        #         look_vector2.y * abs(self.camera.position.z / look.z)
+        #     )
+        #     self.cursor_position = rl.vector2_add(camera_vector2, z_correction)
     
     def update_lock(self, motion: rl.Vector2):
         self.camera.target = rl.Vector3(self.camera.position.x, self.camera.position.y, 0)

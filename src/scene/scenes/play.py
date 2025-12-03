@@ -51,7 +51,7 @@ class PlayScene:
         # Statistics -------
         rl.draw_text(f"Hits: {str(self.coordinator.scoremgr.hits)}", 50, 75, 30, rl.WHITE)
         rl.draw_text(f"Misses: {str(self.coordinator.scoremgr.misses)}", 50, 115, 30, rl.RED)
-        rl.draw_text(f"x{str(self.coordinator.scoremgr.combo)}", 30, rl.get_screen_height() - 65, 55, rl.WHITE)
+        rl.draw_text(f"x{str(self.coordinator.scoremgr.combo)}", 20, rl.get_screen_height() - 65, 55, rl.WHITE)
 
         # Time Bar -------
         time_bar_padding = 5
